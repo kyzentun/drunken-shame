@@ -39,6 +39,22 @@ local t = Def.ActorFrame {
 		end
 	end,
 	ComboCommand=function(self, param)
+		-- confetti logic
+		if confetti_conf.combo_reward > 0 then
+			if prev_combo == -1 then
+				prev_combo= math.floor((param.Combo or 0) /
+						confetti_conf.combo_reward) * confetti_conf.combo_reward
+			end
+			if param.Combo then
+				if param.Combo >= prev_combo + confetti_conf.combo_reward then
+					prev_combo= math.floor(param.Combo / confetti_conf.combo_reward) *
+						confetti_conf.combo_reward
+					activate_confetti("combo", true, player)
+				end
+			else
+				prev_combo= 0
+			end
+		end
 		local iCombo = param.Misses or param.Combo
 		if not iCombo or iCombo < ShowComboAt then
 			c.Number:visible(false)
@@ -89,22 +105,6 @@ local t = Def.ActorFrame {
 		-- Pulse
 		Pulse( c.Number, param )
 		PulseLabel( c.Label, param )
-		-- confetti logic
-		if confetti_conf.combo_reward > 0 then
-			if prev_combo == -1 then
-				prev_combo= math.floor((param.Combo or 0) /
-						confetti_conf.combo_reward) * confetti_conf.combo_reward
-			end
-			if param.Combo then
-				if param.Combo >= prev_combo + confetti_conf.combo_reward then
-					prev_combo= math.floor(param.Combo / confetti_conf.combo_reward) *
-						confetti_conf.combo_reward
-					activate_confetti("combo", true, player)
-				end
-			else
-				prev_combo= 0
-			end
-		end
 	end
 }
 

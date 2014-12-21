@@ -12,6 +12,10 @@ local default_config= {
 						big= {"DeviceButton_unused", "DeviceButton_unused"}},
 		change_speed_type= "DeviceButton_b",
 		save_exit= "DeviceButton_1",
+		easier= "DeviceButton_4",
+		same= "DeviceButton_5",
+		harder= "DeviceButton_6",
+		take_break= "DeviceButton_7",
 		toggle_keys= "DeviceButton_=",
 	},
 	player_number= PLAYER_1,
@@ -34,6 +38,14 @@ local slot_conversion= {
 	[PLAYER_1]= "ProfileSlot_Player1", [PLAYER_2]= "ProfileSlot_Player2",}
 function pn_to_profile_slot(pn)
 	return slot_conversion[pn] or "ProfileSlot_Invalid"
+end
+
+function profile_save_branch()
+	if break_requested then
+		return "ScreenSmashed"
+	else
+		return "ScreenExit"
+	end
 end
 
 function calc_nps(pn, song_len, steps)

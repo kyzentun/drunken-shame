@@ -12,6 +12,11 @@ local mini_disp= false
 prefoptions:FailSetting("FailType_Off")
 poptions:FailSetting("FailType_Off")
 coptions:FailSetting("FailType_Off")
+local transing_out= false
+local function trans(sn)
+	transing_out= true
+	trans_new_screen(sn)
+end
 
 local function calc_approach(amount)
 	-- arrive at new value in .01 seconds
@@ -74,7 +79,21 @@ local function input(event)
 		if dev_button == conf.keys.toggle_keys then
 			conf.special_keys_on= false
 		elseif dev_button == conf.keys.save_exit then
-			trans_new_screen("ScreenProfileSave")
+			break_requested= false
+			trans("ScreenProfileSave")
+		elseif dev_button == conf.keys.take_break then
+			break_requested= true
+			trans("ScreenProfileSave")
+		elseif dev_button == conf.keys.easier then
+			drunk_players[pn].last_score= 0
+			trans("ScreenDrunkenPick")
+		elseif dev_button == conf.keys.same then
+			drunk_players[pn].last_score=
+				(conf.easier_threshold + conf.harder_threshold) / 2
+			trans("ScreenDrunkenPick")
+		elseif dev_button == conf.keys.harder then
+			drunk_players[pn].last_score= 1
+			trans("ScreenDrunkenPick")
 		elseif dev_button == conf.keys.change_speed_type then
 			if conf.speed_mod.type == "M" then
 				conf.speed_mod.type= "C"
@@ -124,8 +143,10 @@ end
 
 local function update(self)
 	bpm_disp:settext("BPM: " .. math.round(screen_gameplay:GetTrueBPS(pn) * 60))
-	drunk_players[pn].last_score= pstats:GetActualDancePoints() /
-		pstats:GetPossibleDancePoints()
+	if not transing_out then
+		drunk_players[pn].last_score= pstats:GetActualDancePoints() /
+			pstats:GetPossibleDancePoints()
+	end
 end
 
 return Def.ActorFrame{

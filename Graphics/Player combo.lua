@@ -96,11 +96,13 @@ local t = Def.ActorFrame {
 			c.Number:diffuse(Color("White"))
 -- 			c.Number:diffuse(PlayerColor(player))
 			c.Number:stopeffect()
-			c.Label:diffuse(Color("White")):diffusebottomedge(color("0.5,0.5,0.5,1"))
+			c.Label:diffuse(Color("White"))
+			c.Label:diffusebottomedge(color("0.5,0.5,0.5,1"))
 		else
 			c.Number:diffuse(color("#ff0000"))
 			c.Number:stopeffect()
-			c.Label:diffuse(Color("Red")):diffusebottomedge(color("0.5,0,0,1"))
+			c.Label:diffuse(Color("Red"))
+			c.Label:diffusebottomedge(color("0.5,0,0,1"))
 		end
 		-- Pulse
 		Pulse( c.Number, param )
